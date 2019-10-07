@@ -1,11 +1,14 @@
 # re-Searcher
+
+
+![logo](https://user-images.githubusercontent.com/56155720/66301515-18245800-e919-11e9-9f90-297352306c9f.png)
+
 re-Searcher is a toolbox aimed to simplify the task for genomics data mining from VCF files. Now there's no need to perform difficult script manipulations in IDE with Python or R. re-Searcher can work with any variant of VCF, for instance, with annotated VCF in ANNOVAR.
 
-
-### Quick Start
+## Quick Start
 Installation of application or script execution are not needed. User simply should run re-searcher.exe
 
-### Features
+## Features
 1.	Browse and open VCF files
 
 2.	Extract header from VCF to new VCF 
@@ -21,7 +24,7 @@ Original GT format is numeric (0/0, 0/1, 1/0 or 1/1), whereas 0 is reference (RE
 
 <img src="https://user-images.githubusercontent.com/56155720/66289919-c1f6eb00-e8ff-11e9-8909-977f9f9e4371.png" width="500"/>
 
-### Usage
+## Usage
 ●	To open VCF file for mining, click the ‘Browse’ button:
 
 <img src="https://user-images.githubusercontent.com/56155720/66289437-87408300-e8fe-11e9-8d0d-d1fd4f1d4ccf.png" width="500"/>
@@ -60,12 +63,12 @@ Then, press ‘Extract from File’ button, after which program ask you to open 
 
 <img src="https://user-images.githubusercontent.com/56155720/66289927-c3281800-e8ff-11e9-9da4-b87957d76775.png" width="500"/>
 
-### Contributing
+## Contributing
 ●	Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
 
-### Credits
+## Credits
 ●	re-Searcher was created at Nazarbayev University/National Laboratory Astana/Center for Life Sciences/Laboratory of Bioinformatics and Computational Systems Biology
 
-### License
+## License
 ●	Copyright 2019 © LBSB.
 
