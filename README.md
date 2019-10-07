@@ -65,7 +65,7 @@ Then, press ‘Extract from File’ button, after which program ask you to open 
 
 ## 🤝 Contributing
 ●Contributions, issues and feature requests are welcome.
-Feel free to check (issues page)[https://github.com/LabBandSB/re-Searcher/issues] if you want to contribute.
+Feel free to check [issues page](https://github.com/LabBandSB/re-Searcher/issues) if you want to contribute.
 
 
 
