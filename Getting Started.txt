@@ -1,0 +1,9 @@
+The 're-Seacher' (v0.7) is bioinformatical application for genomics data mining in Variant Call Format (VCF) 
+
+If you want to open your VCF, press 'Browse' button and select the file. In order to extract keywords with specific lines, type necessary keywords (e.g. UTR5, UTR3) in the 'keywords' entry and press 'Get and Save' button, which will save new VCF with extracted lines.
+
+In order to extract only headers, 'Get Header' button should be pressed. New VCF file with header row will be saved.
+
+You can extract columns with necessary sample columns and cut unnecessary ones. Similarly, type necessary sample names (e.g. WE0001, WE0009) in the 'sample' entry and press 'Get and Save' button, which will save new VCF with necessary sample only. 
+
+To convert the genotype (GT) format from numeric to letters, press 'Convert number GT to letter GT', which will save new VCF with converted GTs
