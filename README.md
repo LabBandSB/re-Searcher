@@ -70,7 +70,7 @@ Feel free to check [issues page](https://github.com/LabBandSB/re-Searcher/issues
 
 
 ## Credits
-●	re-Searcher was created at Nazarbayev University/National Laboratory Astana/Center for Life Sciences/Laboratory of Bioinformatics and  Systems Biology
+●	re-Searcher was created in Laboratory of Bioinformatics and  Systems Biology, Center for Life Sciences, National Laboratory Astana-Nazarbayev University
 
 ## 📝 License
 ●	Copyright 2019 © LBSB.
