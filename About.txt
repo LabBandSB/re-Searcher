@@ -1,5 +1,1 @@
-'the-Researcher' (v0.7) was developed in 
-Nazarbayev University
-National Laboratory Astana
-Center for Life Sciences
-Laboratory of Bioinformatics and Systems Biology
+re-Searcher was developed in Laboratory of Bioinformatics and Systems Biology, Center for Life Sciences, National Laboratory Astana-Nazarbayev University

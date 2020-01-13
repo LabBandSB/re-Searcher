@@ -1,4 +1,4 @@
-The 're-Seacher' (v0.7) is bioinformatical application for genomics data mining in Variant Call Format (VCF) 
+re-Seacher is bioinformatical application for genomics data mining in Variant Call Format (VCF) 
 
 If you want to open your VCF, press 'Browse' button and select the file. In order to extract keywords with specific lines, type necessary keywords (e.g. UTR5, UTR3) in the 'keywords' entry and press 'Get and Save' button, which will save new VCF with extracted lines.
 
