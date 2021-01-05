@@ -4,6 +4,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 import io
 import pandas as pd
+import numpy as np
 import os
 import time
 from datetime import datetime
@@ -221,7 +222,7 @@ def sample_button():
         samples = [i.strip() for i in sample.get().split(',')]
         save = filedialog.asksaveasfilename(title="Select file", defaultextension='.vcf',
                                                 filetypes=[("vcf files", ".vcf")])
-        sample_search(path, samples, save)
+        write_vcf(path, samples, save)
         #
         #total_count = len(samples)
         #statusbar['text'] = '{} samples out of {} input samples in the file were found'.format(count, total_count)
@@ -243,7 +244,7 @@ def main_columns():
     return main_columns, head_index
 
 #sample search function
-def sample_search(path, samples, save):
+def write_vcf(path, samples, save):
     df_main, head_index = main_columns() #main column names and index of header line
     usecols = df_main+samples #main columns and user input sample columns
     df = read_vcf(path, head_index, usecols) #reads file
@@ -278,7 +279,7 @@ def sample_file_button():
                                               filetypes=(("vcf files", "*.txt .vcf"), ("all files", "*.*")))
     samples = sample_file(path_samples)
     save = filedialog.asksaveasfilename(title="Select file", defaultextension='.vcf', filetypes=[("vcf files", ".vcf")])
-    sample_search(path, samples, save)
+    write_vcf(path, samples, save)
     #
     #total_count=len(samples)
     #statusbar['text'] = '{} samples out of {} input samples in the file were found'.format(count, total_count)
@@ -298,43 +299,57 @@ button_sample_file.grid(row=2, column=2, sticky='news', padx=6, pady=3)
 # Function that binds to button, execute conversion function and saves result
 @time_it
 def number_gt_to_letter_gt_button():
-    letter_gt = number_gt_to_letter_gt(path)
-    head = get_header_line(path)
+    cols, head_index = get_header_line(path) #main column names and index of header line
+    df = read_vcf(path, head_index, cols) #reads file
     meta=get_meta(path)
-    filename = filedialog.asksaveasfilename(title="Select file", defaultextension='.vcf', filetypes=[("vcf files", ".vcf")])
-    save_search_result(filename, letter_gt, meta=meta, head=head)
+    save = filedialog.asksaveasfilename(title="Select file", defaultextension='.vcf', filetypes=[("vcf files", ".vcf")])
+    save_search_result(save, meta=meta, head=cols)
+    gt_convert(df, save, cols)
     statusbar['text'] = 'GT numbers were converted to GT letters'
 
-#GT conversion
-def number_gt_to_letter_gt(vcf):
-    head = get_header_line(vcf)
-    CHROM = head.index('#CHROM')
-    for line in open(vcf):
-        if '#' in line: #skip lines with '#'
-            pass
-        elif 'chr' in line: #parse only lines with 'chr'
-            arr = line.strip().split('\t')
-            arr[CHROM + 8] = 'GT'
-            ra = '\t'.join(arr[0:CHROM + 9])
-            sample_gt = list()
-            for gt in arr[CHROM + 9:]:
-                gt = gt.split(':')[0]
-                if len(arr[CHROM + 3]) > 1 or len(arr[CHROM + 4]) > 1:
-                    letter_gt = 'MULTIALLELIC SNP' #If more that 1 nucleotide in a field
-                elif gt == '0/0' or gt == '0|0':
-                    letter_gt = (arr[CHROM + 3]) * 2 #if 0/0 GT -> REF/REF
-                elif gt == '0/1' or gt == '0|1':
-                    letter_gt = (arr[CHROM + 3]) + (arr[CHROM + 4]) #if 0/1 GT -> REF/ALT
-                elif gt == '1/1' or gt == '1|1':
-                    letter_gt = (arr[CHROM + 4]) * 2 #if 1/1 GT -> ALT/ALT
-                elif gt == './.':
-                    letter_gt = '..'
-                sample_gt.append(letter_gt)
-            sample_gt = '\t'.join(sample_gt)
-            output = ra + '\t' + sample_gt + '\n'
-            yield output
-        else: pass
-#
+# #GT convertion
+def gt_convert(df, output_vcf, column_names):
+
+    #List of samples in VCF
+    sample_list = column_names[column_names.index('FORMAT')+1:]
+
+    for chunk in df: #read file by chunk
+
+        chunk["REF_ALT"] = chunk.loc[:,'REF'].str.split(',') + chunk.loc[:,'ALT'].str.split(',')
+        for sample in sample_list: #convert gt of every sample
+            #Replace 'REF|ALT' with 'REF/ALT' 
+            chunk[sample] = chunk[sample].str.replace('|', '/')
+            
+            #If FORMAT includes not only GT, then split by ':' after GT (new columns 0 and 1 will appear)
+            if chunk[chunk[sample].str.contains(':')].empty is False:
+                chunk = pd.concat([chunk,chunk[sample].str.split(':',expand=True, n=1)],1)
+                #Replace sample column with column 0 to get rid of !GT
+                chunk[sample]= chunk[0]
+                #Drop column 0
+                chunk= chunk.drop(columns=[0])
+                #Rename column 1 to !GT
+                chunk = chunk.rename(columns={1: '!GT'})
+            else: pass
+
+            #Split sample column by '/' (new columns 0 and 1 will appear)
+            chunk = pd.concat([chunk,chunk[sample].str.split('/',expand=True)],1)
+            #Convert column 0 to letter GT
+            chunk[0] = chunk.apply(lambda row: '.' if row[0] == '.' or row[0] == None else row["REF_ALT"][int(row[0])], axis=1)
+             #Convert column 1 to letter GT
+            chunk[1] = chunk.apply(lambda row: np.nan if row[1] == '.' or row[1] == None else row["REF_ALT"][int(row[1])], axis=1)
+            #Merge columns 0 and 1 with '/'
+            chunk[sample] = chunk[[0,1]].apply(lambda x: '/'.join(x[x.notnull()]), axis = 1)
+            #Drop columns 0 and 1
+            chunk= chunk.drop(columns=[0, 1])
+            
+            #Merge sample column with !GT column with ':'
+            if '!GT' in chunk.columns:
+                chunk[sample] = chunk[[sample,'!GT']].apply(lambda x: ':'.join(x[x.notnull()]), axis = 1)
+                chunk= chunk.drop(columns=['!GT'])
+            else: pass
+        chunk = chunk.drop(columns=['REF_ALT'])
+        chunk.to_csv(output_vcf, mode='a', sep='\t', index=False, header = False) # writes converted output 
+
 # GT conversion button
 button_gt = Button(frame, text='Convert GT', bg='#c1c7cf', fg='black', relief='ridge',
                    command=number_gt_to_letter_gt_button)
