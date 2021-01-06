@@ -7,7 +7,7 @@ re-Searcher is a toolbox aimed to simplify the task for genomics data mining fro
 
 ## 🚀 Quick Start
 1. Click on **Releases** on the right side of this page and download re-Searcher.zip from the latest release.
-2. Unzip the archive file with WinRAR or 7zip.
+2. To unzip the archive file, right-click to it and select Extract All.
 3. Execute **re-searcher** file to run the tool.
 
 ## ✅  Features
