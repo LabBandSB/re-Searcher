@@ -31,8 +31,8 @@ e.g. if you want filter your VCF file to only have two samples: WE0001 and WE006
 Original GT format is numeric (0/0, 0/1, 1/0 or 1/1, etc.), whereas 0 is reference (REF) allele and 1 is alternative (ALT) allele. Multiallelic rows (0/3, 3/2) will be converted by inserting respective ALT allele.
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/56155720/106136760-eed5ae00-6193-11eb-9757-75194badf070.png" width="450" />
-  <img src="https://user-images.githubusercontent.com/56155720/106136764-f006db00-6193-11eb-981d-0d4d449ca39a.png" width="450" /> 
+  <img src="https://user-images.githubusercontent.com/56155720/106136760-eed5ae00-6193-11eb-9757-75194badf070.png" width="400" />
+  <img src="https://user-images.githubusercontent.com/56155720/106136764-f006db00-6193-11eb-981d-0d4d449ca39a.png" width="400" /> 
 </p>
 
 ## ⚒   Usage
